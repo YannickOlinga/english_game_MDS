@@ -7,45 +7,112 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="card.css" />
-  <meta name="description" content="Grille de 6 cartes avec animation en tourbillon à l'ouverture." />
+<style>
+/* === Carousel amélioré : cartes agrandies + rotation 3s + arrêt carte aléatoire === */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page { max-width: 1100px; margin: auto; padding: 40px 20px; }
+.title { font-size: 2rem; font-weight: 800; margin-bottom: 24px; text-align:center; }
+
+.carousel {
+  width: 500px;
+  height: 500px;
+  margin: 80px auto;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: spinOnce 3s ease-out forwards;
+}
+
+@keyframes spinOnce {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+
+.carousel__item {
+  width: 300px;
+  height: 380px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, #7b2ff7, #f107a3);
+  position: absolute;
+  top: 60px;
+  left: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  transform-style: preserve-3d;
+  transition: transform 1s ease-out;
+  z-index: 1;
+}
+
+.carousel__item:nth-child(1) { transform: rotateY(0deg) translateZ(350px); }
+.carousel__item:nth-child(2) { transform: rotateY(60deg) translateZ(350px); }
+.carousel__item:nth-child(3) { transform: rotateY(120deg) translateZ(350px); }
+.carousel__item:nth-child(4) { transform: rotateY(180deg) translateZ(350px); }
+.carousel__item:nth-child(5) { transform: rotateY(240deg) translateZ(350px); }
+.carousel__item:nth-child(6) { transform: rotateY(300deg) translateZ(350px); }
+
+/* Carte mise en avant */
+.carousel__item.focused {
+  transform: translateZ(600px) scale(1.35) !important;
+  z-index: 10;
+}
+  /* Zoom + éclairage 3D sur la carte mise en avant */
+  .carousel__item.highlighted {
+    transform: translateZ(150px) scale(1.3) rotateY(0deg) !important;
+    box-shadow: 0 30px 60px rgba(255, 255, 255, 0.5),
+                0 10px 25px rgba(0, 0, 0, 0.4);
+    filter: brightness(1.3);
+    animation: lightSweep 2s ease infinite;
+  }
+
+  /* Animation d’éclairage dynamique */
+  @keyframes lightSweep {
+    0% { box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+    50% { box-shadow: 0 0 60px rgba(255,255,255,0.6); }
+    100% { box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+  }
+
+</style>
 </head>
 <body>
   <main class="page">
     <h1 class="title">Cartes</h1>
+
     <section class="cards-grid" aria-label="Liste de cartes">
-      <article class="card" tabindex="0">
-        <div class="card-media" aria-hidden="true"></div>
-        <h2 class="card-title">Communication</h2>
-        <p class="card-text">Exprimer clairement ses idées.</p>
-      </article>
-      <article class="card" tabindex="0">
-        <div class="card-media" aria-hidden="true"></div>
-        <h2 class="card-title">Coopération</h2>
-        <p class="card-text">Travailler ensemble efficacement.</p>
-      </article>
-      <article class="card" tabindex="0">
-        <div class="card-media" aria-hidden="true"></div>
-        <h2 class="card-title">Créativité</h2>
-        <p class="card-text">Trouver des solutions innovantes.</p>
-      </article>
-      <article class="card" tabindex="0">
-        <div class="card-media" aria-hidden="true"></div>
-        <h2 class="card-title">Assertivité</h2>
-        <p class="card-text">S'affirmer avec respect.</p>
-      </article>
-      <article class="card" tabindex="0">
-        <div class="card-media" aria-hidden="true"></div>
-        <h2 class="card-title">Gestion du stress</h2>
-        <p class="card-text">Rester calme sous pression.</p>
-      </article>
-      <article class="card" tabindex="0">
-        <div class="card-media" aria-hidden="true"></div>
-        <h2 class="card-title">Écoute active</h2>
-        <p class="card-text">Comprendre avant de répondre.</p>
-      </article>
+      <div class="carousel">
+        <div class="carousel__item">Communication</div>
+        <div class="carousel__item">Coopération</div>
+        <div class="carousel__item">Créativité</div>
+        <div class="carousel__item">Assertivité</div>
+        <div class="carousel__item">Gestion du stress</div>
+        <div class="carousel__item">Écoute active</div>
+      </div>
     </section>
   </main>
+
+<script>
+window.addEventListener('load', () => {
+  const cards = document.querySelectorAll('.carousel__item');
+  const carousel = document.querySelector('.carousel');
+
+  const randomIndex = Math.floor(Math.random() * cards.length);
+  const chosen = cards[randomIndex];
+
+  setTimeout(() => {
+    chosen.classList.add('focused');
+    carousel.style.animation = 'none';
+  }, 3000);
+});
+</script>
 </body>
-  
 </html>

@@ -1,110 +1,150 @@
-/* Base */
-:root {
-  --bg: #ffffff;
-  --text-1: #0f172a;
-  --text-2: #5b6b7d;
-  --border: rgba(15, 23, 42, 0.08);
-  --primary: #3b82f6;
+:root{
+ --bg:#fff;--text-1:#0f172a;--text-2:#5b6b7d;--border:rgba(15,23,42,.08);--primary:#3b82f6
 }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text-1);line-height:1.6}
+.page{max-width:1100px;margin:auto;padding:40px 20px}
+.title{font-size:2rem;font-weight:800;margin-bottom:24px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.scene{perspective:1200px}
+.card{position:relative;width:100%;height:390px;border:1px solid var(--border);border-radius:16px;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.9,.3,1);box-shadow:0 8px 24px rgba(15,23,42,.06);overflow:hidden;background-size:cover;background-repeat:no-repeat}
+.scene:hover .card,.scene:focus-within .card{transform:rotateY(180deg)}
+.card__face{position:absolute;inset:0;backface-visibility:hidden;padding:20px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.card__face--back{transform:rotateY(180deg)}
+.card-title{font-size:1.125rem;font-weight:700}
+.card-text{color:var(--text-2)}
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
-body {
-  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text-1);
-  line-height: 1.6;
-}
-
-.page { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
-.title { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
-
-/* Grid */
+/* ---- Tourbillon collectif au chargement ---- */
 .cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  opacity: 0;
+  transform: scale(0.3) rotate(-180deg);
+  animation: collectiveSwirl 1.2s cubic-bezier(.25,.9,.25,1) forwards;
+  transform-origin: center center;
 }
 
-@media (max-width: 900px) {
-  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+/* Animation du tourbillon collectif */
+@keyframes collectiveSwirl {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-360deg) translateY(-200px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05) rotate(20deg) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg) translateY(0);
+  }
 }
 
-@media (max-width: 560px) {
-  .cards-grid { grid-template-columns: 1fr; }
-}
-
-/* Card */
+/* Chaque carte fait un micro-zoom + rebond après le tourbillon */
 .card {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  background:url(images/Plateau\ de\ jeu\ coloré\ et\ vintage.png);
+  animation: popIn 0.6s ease-out both;
+  animation-delay: 1.2s;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+  70% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+
+/* ---- Mise en disposition carousel type 3 cartes (style screenshot) ---- */
+.carousel-container {
   display: flex;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 400px;
-  flex-direction: column;
-  gap: 10px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  transform-origin: center;
-  /* per-card stagger variable */
-  --stagger: 0ms;
-  /* chain animations: swirl-in once, then float infinitely */
-  animation-name: swirl-in, float;
-  animation-duration: 720ms, 6s;
-  animation-timing-function: cubic-bezier(.2,.7,.2,1), ease-in-out;
-  animation-fill-mode: both, both;
-  animation-iteration-count: 1, infinite;
-  animation-delay: var(--stagger), calc(var(--stagger) + 720ms);
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 2rem;
+  perspective: 1200px;
 }
 
-.card:focus { outline: 2px solid rgba(59,130,246,.35); outline-offset: 3px; }
-
-.card:nth-child(1) { --stagger: 60ms; }
-.card:nth-child(2) { --stagger: 140ms; }
-.card:nth-child(3) { --stagger: 220ms; }
-.card:nth-child(4) { --stagger: 300ms; }
-.card:nth-child(5) { --stagger: 380ms; }
-.card:nth-child(6) { --stagger: 460ms; }
-
-.card:hover { box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12); transform: translateY(-2px) rotate(0deg); }
-
-.card-media {
-  font-size: 2.2rem;
-  inline-size: 56px;
-  block-size: 56px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: rgba(59,130,246,.08);
+.carousel-card {
+  width: 220px;
+  height: 300px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #6e00ff, #ff00a6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  transition: transform 0.6s ease, opacity 0.6s;
+  position: relative;
+  cursor: pointer;
 }
 
-.card-title { font-size: 1.125rem; font-weight: 700; }
-.card-text { color: var(--text-2); }
-
-/* Swirl-in animation */
-@keyframes swirl-in {
-  0% { transform: translateY(24px) scale(.86) rotate(-22deg); filter: blur(3px); opacity: 0; }
-  60% { transform: translateY(-4px) scale(1.03) rotate(4deg); filter: blur(0); opacity: .98; }
-  100% { transform: translateY(0) scale(1) rotate(0); opacity: 1; }
+/* Carte centrale en avant */
+.carousel-card.center {
+  transform: scale(1.2);
+  z-index: 3;
 }
 
-/* Gentle floating effect after settled */
-@keyframes float {
-  0% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-6px) rotate(.2deg); }
-  100% { transform: translateY(0) rotate(0deg); }
+/* Carte gauche */
+.carousel-card.left {
+  transform: translateX(-60px) scale(0.9) rotateY(20deg);
+  opacity: 0.7;
+  z-index: 2;
 }
 
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .card {
-    animation: fade-in 300ms ease-out both;
-    animation-delay: var(--stagger);
-  }
-  @keyframes fade-in {
-    from { opacity: 0; transform: none; }
-    to { opacity: 1; transform: none; }
-  }
+/* Carte droite */
+.carousel-card.right {
+  transform: translateX(60px) scale(0.9) rotateY(-20deg);
+  opacity: 0.7;
+  z-index: 2;
+}
+
+/* Animation: changement automatique toutes les 3 secondes */
+@keyframes rotateCarousel {
+  0% { }
+  33% { }
+  34% { }
+  66% { }
+  67% { }
+  100% { }
+}
+/* Carrousel container */
+.carousel {
+  width: 300px;
+  height: 300px;
+  margin: 80px auto;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateCarousel 10s linear infinite;
+}
+
+/* Elements (tes cartes) */
+.carousel__item {
+  width: 180px;
+  height: 240px;
+  background: linear-gradient(135deg, #7b2ff7, #f107a3);
+  border-radius: 18px;
+  position: absolute;
+  top: 30px;
+  left: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  transform-style: preserve-3d;
+}
+
+/* Positionnement des 6 cartes en cercle */
+.carousel__item:nth-child(1) { transform: rotateY(0deg) translateZ(260px); }
+.carousel__item:nth-child(2) { transform: rotateY(60deg) translateZ(260px); }
+.carousel__item:nth-child(3) { transform: rotateY(120deg) translateZ(260px); }
+.carousel__item:nth-child(4) { transform: rotateY(180deg) translateZ(260px); }
+.carousel__item:nth-child(5) { transform: rotateY(240deg) translateZ(260px); }
+.carousel__item:nth-child(6) { transform: rotateY(300deg) translateZ(260px); }
+
+/* Rotation automatique */
+@keyframes rotateCarousel {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
 }

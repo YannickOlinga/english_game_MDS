@@ -6,12 +6,12 @@
 
 :root {
     --primary-gradient: linear-gradient(135deg, #a58fff 0%, #3975f5 50%, #7046ec 100%);
-    --secondary-gradient: linear-gradient(135deg, #5daaed 0%, #53a5f7 100%);
+    --secondary-gradient: linear-gradient(135deg, #00a6d0 0%, #53a5f7 100%);
     --dark-bg: #ffffff;
     --card-bg: #e5f8fd;
     --card-border: rgba(15, 23, 42, 0.08);
-    --accent-orange: #3b82f6;
-    --accent-purple: #55a3fb;
+    --accent-orange: #00a6d0;
+    --accent-purple: #00a6d0;
     --text-primary: #0f172a;
     --text-secondary: #5b6b7d;
 }
