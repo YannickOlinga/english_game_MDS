@@ -228,11 +228,7 @@ body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-seri
   }
 }
 
-/* ============================================
-   CARTES RESPONSIVE AMÉLIORÉ - 7 BREAKPOINTS
-   ============================================ */
 
-/* ---- VERY SMALL SCREENS (< 320px) ---- */
 @media (max-width: 319px) {
   .page {
     padding: 15px 10px;
